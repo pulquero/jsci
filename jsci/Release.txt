@@ -1,0 +1,40 @@
+Version 1.2
+
+Additional probability distributions.
+Graph class improvements.
+MathML support fixes.
+
+Version 1.1
+
+Improvements to handle huge sparse matrices.
+Better LU caching.
+
+Version 0.945
+
+Fixed thread-safety bug in SpecialMath.
+
+Version 0.944
+
+Added LU method without pivoting. Added row swap optimisation to LU method with pivoting.
+
+Version 0.943
+
+Bug fixes and added more trig methods to ExtraMath (d.t.).
+
+Version 0.942
+
+Added symbolic expression parser.
+Added custom axis labelling support to graph classes.
+
+Version 0.941
+
+Fixed FFT bug.
+
+Version 0.94
+
+Moved matrices and vector classes to seperate sub-packages!!!
+Added bisection and newton-raphson methods to NumericalMath.
+Fixed behaviour of default category model to be same as default graph model.
+Added histogram graph.
+Added more getter methods to most graphs.
+Some visual improvements to graphs.

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp
+ codebase="http://jsci.org.uk/jnlp"
+ href="http://jsci.org.uk/jnlp/jsci.jnlp">
+   <information>
+      <title>JSci</title>
+      <vendor>Mark Hale</vendor>
+      <homepage ref="http://jsci.org.uk/"/>
+      <offline-allowed/>
+   </information>
+   <resources>
+      <jar href="jsci-astro.jar" part="astro" download="lazy"/>
+      <jar href="jsci-bio.jar" part="bio" download="lazy"/>
+      <jar href="jsci-core.jar" part="core" download="lazy"/>
+      <jar href="jsci-sci.jar" part="sci" download="lazy"/>
+      <jar href="jsci-wavelet.jar" part="wavelet" download="lazy"/>
+      <jar href="jsci-xtra.jar" part="xtra" download="lazy"/>
+   </resources>
+   <component-desc/>
+</jnlp>

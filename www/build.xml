@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="www" default="all">
+<property name="jsci.home" value="../jsci"/>
+
+<target name="index">
+<copy file="${jsci.home}/LICENSE" todir="."/>
+<java classname="SerializeVersion" classpath="${jsci.home}/classes/jsci-core.jar;.">
+   <arg value="${jsci.home}/JSci.zip"/>
+   <arg value="version.ser"/>
+</java>
+<style in="packages.xml" out="index.html" style="index.xsl"/>
+</target>
+
+<target name="jnlp">
+<copy todir="jnlp">
+   <fileset dir="${jsci.home}/classes" includes="*.jar"/>
+</copy>
+</target>
+
+<target name="examples" depends="jnlp">
+<copy todir="examples">
+   <fileset dir="${jsci.home}/classes" includes="jsci-core.jar jsci-xtra.jar"/>
+</copy>
+<jar destfile="examples/chaos.jar" basedir="${jsci.home}/examples/Chaos" includes="*.class"/>
+</target>
+
+<target name="all" depends="examples">
+<zip destfile="www.zip" basedir="." includes="**/*.html **/*.jnlp **/*.jar *.ser LICENSE"/>
+<zip destfile="api.zip" basedir="${jsci.home}/documentation" includes="api/**"/>
+</target>
+
+<target name="clean">
+<delete>
+   <fileset dir="." includes="*.zip"/>
+</delete>
+</target>
+</project>

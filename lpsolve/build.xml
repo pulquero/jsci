@@ -1,0 +1,57 @@
+<project name="LPSolve" default="dist">
+<description>
+LPSolve for Java
+</description>
+
+<property name="build.compiler" value="extJavac"/>
+<property name="java.source" value="1.3"/>
+<property name="jvm.target" value="1.3"/>
+<property name="dist.name" value="LPSolve"/>
+
+<target name="classes" description="compile Java source files">
+   <javac srcdir="classes" source="${java.source}" target="${jvm.target}"/>
+</target>
+
+<target name="jars" description="make jar files">
+   <jar jarfile="classes/lpsolve.jar" manifest="classes/lpsolve.mf">
+      <fileset dir="classes" includes="com/cflex/util/lpSolve/**/*.class"/>
+      <fileset dir="classes" includes="com/cflex/util/lpSolve/**/*.gif"/>
+   </jar>
+</target>
+
+<target name="api" description="make API documentation">
+   <javadoc packagenames="com.cflex.util.lpSolve.*" sourcepath="classes" destdir="documentation/api"
+            windowtitle="LPSolve API Documentation"
+            package="true" author="false" version="false">
+      <doctitle>LPSolve</doctitle>
+   </javadoc>
+</target>
+
+<target name="src" description="zip source files">
+   <zip zipfile="source.zip">
+      <zipfileset prefix="classes/com/cflex/util/lpSolve" dir="classes/com/cflex/util/lpSolve" excludes="**/*.class"/>
+   </zip>
+</target>
+
+<target name="examples" description="compile examples">
+   <javac srcdir="examples/testing" source="${java.source}" target="${jvm.target}"/>
+</target>
+
+<target name="dist" depends="classes, jars, api, src, examples">
+   <zip zipfile="${dist.name}.zip">
+      <zipfileset prefix="${dist.name}" dir="."
+                  includes="index.html, source.zip"/>
+      <zipfileset prefix="${dist.name}/classes" dir="classes" includes="*.jar"/>
+      <zipfileset prefix="${dist.name}/documentation" dir="documentation"/>
+      <zipfileset prefix="${dist.name}/examples" dir="examples"/>
+   </zip>
+</target>
+
+<target name="clean">
+   <delete>
+      <fileset dir="." includes="*.zip"/>
+      <fileset dir="classes" includes="*.jar"/>
+      <fileset dir="classes/com/cflex/util/lpSolve" includes="**/*.class"/>
+   </delete>
+</target>
+</project>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp href="http://jsci.org.uk/examples/Mandelbrot.jnlp"
+ codebase="http://jsci.org.uk/examples/">
+   <information>
+      <title>Mandelbrot plot</title>
+      <vendor>Mark Hale</vendor>
+      <description>Plot of the Mandelbrot set.</description>
+      <homepage href="http://jsci.org.uk/examples/"/>
+   </information>
+   <resources>
+      <j2se version="1.3+"/>
+      <extension name="JSci" href="http://jsci.org.uk/jnlp/jsci.jnlp">
+         <ext-download ext-part="core"/>
+         <ext-download ext-part="xtra"/>
+      </extension>
+   </resources>
+   <applet-desc documentBase="http://jsci.org.uk/examples/Mandelbrot.html"
+ name="Mandelbrot plot" width="400" height="400" main-class="MandelbrotPlot"/>
+</jnlp>

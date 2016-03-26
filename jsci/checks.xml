@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC
+    "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+<module name="Checker">
+   <property name="basedir" value="${checkstyle.basedir}"/>
+   <property name="localeLanguage" value="en"/>
+   <module name="NewlineAtEndOfFile">
+      <property name="lineSeparator" value="crlf"/>
+   </module>
+   <module name="TreeWalker">
+      <module name="CovariantEquals"/>
+      <module name="DoubleCheckedLocking"/>
+      <module name="EqualsHashCode"/>
+      <module name="SimplifyBooleanReturn"/>
+      <module name="StringLiteralEquality"/>
+   </module>
+</module>

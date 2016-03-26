@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="JSci" default="dist">
+<description>JSci - A science API for Java</description>
+
+<property name="src" value="classes"/>
+<property name="build" value="build"/>
+<property name="docs" value="documentation"/>
+
+<property name="build.compiler" value="modern"/>
+<property name="java.source" value="1.3"/>
+<property name="jvm.target" value="1.1"/>
+<property name="dist.name" value="JSci"/>
+
+<path id="project.class.path">
+   <fileset dir="lib" includes="*.jar"/>
+   <pathelement location="../../../commapi/comm.jar"/>
+   <pathelement location="../../../programming/java/mathmldom/mathmldom.jar"/>
+   <pathelement location="/program files (x86)/JMF2.1.1e/lib/jmf.jar"/>
+</path>
+
+<path id="texen.class.path">
+	<pathelement location="../../../texen-1.0/texen-1.0.jar"/>
+	<pathelement location="../../../texen-1.0/lib/velocity-1.5.jar"/>
+	<pathelement location="../../../texen-1.0/lib/commons-lang-2.1.jar"/>
+	<pathelement location="../../../texen-1.0/lib/commons-collections-3.1.jar"/>
+</path>
+<property name="checkstyle.home" value="../../../checkstyle-5.3"/>
+<path id="checkstyle.class.path" path="${checkstyle.home}/checkstyle-5.3-all.jar"/>
+
+<target name="java" description="configure source files">
+   <replace dir="${src}" summary="true" includes="**/*.java">
+      <replacefilter token="import compatibility." value="import "/>
+   </replace>
+
+   <taskdef name="texen" classname="org.apache.texen.ant.TexenTask" classpathref="texen.class.path"/>
+
+   <texen templatePath="${src}\JSci\maths\matrices" controlTemplate="generateMatrixClasses.vm"
+    outputDirectory="${src}\JSci\maths\matrices" outputFile="generation.report"/>
+   <texen templatePath="${src}\JSci\maths\vectors" controlTemplate="generateVectorClasses.vm"
+    outputDirectory="${src}\JSci\maths\vectors" outputFile="generation.report"/>
+   <texen templatePath="${src}\JSci\awt" controlTemplate="generateGraphClasses.vm"
+    outputDirectory="${src}\JSci\awt" outputFile="generation.report"/>
+   <fixcrlf srcdir="${src}" includes="**/*.java" eol="asis" eof="remove"/>
+</target>
+
+<target name="classes" description="compile source files">
+   <available classname="javax.comm.SerialPort" property="javax.comm.available"/>
+   <available classname="org.w3c.dom.mathml.MathMLDocument" property="org.w3c.dom.mathml.available"/>
+   <available classname="junitx.extensions.EqualsHashCodeTestCase" property="junitx.available"/>
+
+   <mkdir dir="${build}"/>
+   <javac srcdir="${src}" destdir="${build}" classpathref="project.class.path" source="${java.source}" target="${jvm.target}" optimize="on">
+<!--
+      <exclude name="JSci/astro/telescope/**" unless="javax.comm.available"/>
+      <exclude name="JSci/io/MathML*" unless="org.w3c.dom.mathml.available"/>
+      <exclude name="JSci/mathml/**" unless="org.w3c.dom.mathml.available"/>
+      <exclude name="JSci/tests/**" unless="junitx.available"/>
+-->
+   </javac>
+</target>
+
+<!--
+<target name="java11" description="configure source files for Java 1.1">
+   <replace dir="${src}" summary="true" includes="**/*.java">
+      <replacefilter token="import java.lang.Comparable;" value="import compatibility.java.lang.Comparable;"/>
+      <replacefilter token="import java.lang.Double;" value="import compatibility.java.lang.Double;"/>
+      <replacefilter token="import java.lang.UnsupportedOperationException;" value="import compatibility.java.lang.UnsupportedOperationException;"/>
+      <replacefilter token="import java.awt.geom.Point2D;" value="import compatibility.java.awt.geom.Point2D;"/>
+      <replacefilter token="import java.util.Arrays;" value="import compatibility.java.util.Arrays;"/>
+      <replacefilter token="import java.util.Collections;" value="import compatibility.java.util.Collections;"/>
+      <replacefilter token="import java.util.Iterator;" value="import compatibility.java.util.Iterator;"/>
+      <replacefilter token="import java.util.Set;" value="import compatibility.java.util.Set;"/>
+      <replacefilter token="import java.util.List;" value="import compatibility.java.util.List;"/>
+      <replacefilter token="import java.util.Map;" value="import compatibility.java.util.Map;"/>
+      <replacefilter token="import java.util.HashSet;" value="import compatibility.java.util.HashSet;"/>
+      <replacefilter token="import java.util.ArrayList;" value="import compatibility.java.util.ArrayList;"/>
+      <replacefilter token="import java.util.HashMap;" value="import compatibility.java.util.HashMap;"/>
+      <replacefilter token="import java.util.WeakHashMap;" value="import compatibility.java.util.WeakHashMap;"/>
+   </replace>
+</target>
+
+<target name="classes11" description="compile source files for Java 1.1" depends="java11">
+   <javac srcdir="${src}" destdir="${build}" target="1.1" bootclasspath="c:/java11/lib/classes.zip" extdirs="../compatibility/ext">
+      <exclude name="JSci/doclet/**"/>
+      <exclude name="JSci/astro/telescope/**"/>
+   </javac>
+</target>
+-->
+
+<target name="jars" description="make jar files">
+   <jar destfile="${build}/jsci-core.jar" manifest="${src}/core.mf">
+      <fileset dir="${src}" includes="JSci/Bundle.properties"/>
+      <fileset dir="${build}" includes="JSci/*.class"/>
+      <fileset dir="${build}" includes="JSci/maths/**/*.class" excludes="JSci/maths/wavelet/"/>
+   </jar>
+   <jar destfile="${build}/jsci-wavelet.jar" manifest="${src}/wavelet.mf">
+      <fileset dir="${build}" includes="JSci/maths/wavelet/**/*.class"/>
+   </jar>
+   <jar destfile="${build}/jsci-sci.jar" manifest="${src}/sci.mf">
+      <fileset dir="${build}" includes="JSci/physics/**/*.class"/>
+      <fileset dir="${build}" includes="JSci/chemistry/**/*.class"/>
+      <fileset dir="${src}" includes="JSci/chemistry/periodictable/*.xml JSci/chemistry/periodictable/*.dtd"/>
+   </jar>
+   <jar destfile="${build}/jsci-astro.jar" manifest="${src}/astro.mf">
+      <fileset dir="${build}" includes="JSci/astro/**/*.class"/>
+   </jar>
+   <jar destfile="${build}/jsci-bio.jar" manifest="${src}/bio.mf">
+      <fileset dir="${build}" includes="JSci/biology/**/*.class"/>
+      <fileset dir="${src}" includes="JSci/biology/aminoacids/*.xml JSci/biology/aminoacids/*.dtd"/>
+   </jar>
+   <jar destfile="${build}/jsci-xtra.jar" manifest="${src}/xtra.mf">
+      <fileset dir="${build}" includes="JSci/awt/**/*.class"/>
+      <fileset dir="${build}" includes="JSci/swing/**/*.class"/>
+      <fileset dir="${build}" includes="JSci/text/**/*.class"/>
+      <fileset dir="${build}" includes="JSci/io/**/*.class"/>
+      <fileset dir="${build}" includes="JSci/util/**/*.class"/>
+   </jar>
+   <jar destfile="${build}/jsci-instr.jar">
+      <fileset dir="${build}" includes="JSci/instruments/**/*.class"/>
+   </jar>
+   <jar destfile="${build}/jsci-mathmlimpl.jar">
+      <fileset dir="${build}" includes="JSci/mathml/**/*.class"/>
+   </jar>
+   <jar destfile="${build}/jsci-beans.jar" manifest="${src}/beans.mf">
+      <fileset dir="${build}" includes="JSci/beans/**/*.class"/>
+   </jar>
+</target>
+
+<target name="api" description="make API documentation">
+   <javadoc classpathref="project.class.path" sourcepath="${src}" destdir="${docs}/api"
+            doctitle="JSci Packages"
+            windowtitle="JSci API Documentation"
+            package="true" author="false" version="false">
+      <taglet name="JSci.doclet.PlanetMathTaglet" path="${build}"/>
+      <taglet name="JSci.doclet.PlanetPhysicsTaglet" path="${build}"/>
+      <taglet name="JSci.doclet.WikipediaTaglet" path="${build}"/>
+      <package name="JSci.*"/>
+      <excludepackage name="JSci.doclet.*"/>
+      <excludepackage name="JSci.beans.*"/>
+      <excludepackage name="JSci.tests.*"/>
+      <group title="Maths Packages">
+         <package name="JSci.maths.*"/>
+      </group>
+      <group title="Physics Packages">
+         <package name="JSci.astro.*"/>
+         <package name="JSci.physics.*"/>
+      </group>
+      <group title="Chemistry Packages">
+         <package name="JSci.chemistry.*"/>
+      </group>
+   </javadoc>
+</target>
+
+<target name="source" description="zip source files">
+   <zip zipfile="source.zip">
+      <zipfileset dir="${src}" excludes="**/*.class *.jar"/>
+   </zip>
+</target>
+
+<target name="examples" description="compile examples">
+   <javac srcdir="examples/Chaos" classpath="${build}" source="${java.source}" target="${jvm.target}"/>
+   <javac srcdir="examples/CurveFitter" classpath="${build}" source="${java.source}" target="${jvm.target}"/>
+   <javac srcdir="examples/Denoise" classpath="${build}" source="${java.source}" target="${jvm.target}"/>
+   <javac srcdir="examples/DistributionGenerator" classpath="${build}" source="${java.source}" target="${jvm.target}"/>
+   <javac srcdir="examples/FourierDisplay" classpath="${build}" source="${java.source}" target="${jvm.target}"/>
+   <javac srcdir="examples/GraphDemo" classpath="${build}" source="${java.source}" target="${jvm.target}"/>
+   <javac srcdir="examples/HEPsimulator" classpath="${build}" source="${java.source}" target="${jvm.target}"/>
+   <javac srcdir="examples/Mechanics" classpath="${build}" source="${java.source}" target="${jvm.target}"/>
+   <javac srcdir="examples/MonteCarlo" classpath="${build}" source="${java.source}" target="${jvm.target}"/>
+   <javac srcdir="examples/PeriodicTable" classpath="${build}" source="${java.source}" target="${jvm.target}"/>
+   <javac srcdir="examples/Quasicrystal" classpath="${build}" source="${java.source}" target="${jvm.target}"/>
+   <javac srcdir="examples/Wavefunction" classpath="${build}" source="${java.source}" target="${jvm.target}"/>
+   <javac srcdir="examples/wavelet" classpath="${build}" source="${java.source}" target="${jvm.target}"/>
+   <javac srcdir="examples/wavelet/applet" classpath="${build}" source="${java.source}" target="${jvm.target}"/>
+</target>
+
+<target name="docs" depends="api, metrics">
+   <javac srcdir="${docs}"/>
+   <java classpath="${docs}" classname="XmlDoc" fork="true">
+      <arg value="classes/JSci/chemistry/periodictable"/>
+      <arg value="${docs}/periodictable/elements.xsl"/>
+      <arg value="${docs}/periodictable"/>
+      <arg value="periodic-table"/>
+      <arg value="element"/>
+   </java>
+   <java classpath="${docs}" classname="XmlDoc" fork="true">
+      <arg value="classes/JSci/biology/aminoacids"/>
+      <arg value="${docs}/aminoacids/aminoacids.xsl"/>
+      <arg value="${docs}/aminoacids"/>
+      <arg value="amino-acids"/>
+      <arg value="amino-acid"/>
+   </java>
+</target>
+
+<target name="dist" depends="java, classes, jars, test, docs, source, examples">
+   <zip zipfile="${dist.name}.zip">
+      <zipfileset prefix="${dist.name}" dir="."
+                  includes="index.html, LICENSE, JSci?.ico, VersionApplet.*, source.zip"/>
+      <zipfileset prefix="${dist.name}/classes" dir="${build}" includes="*.jar"/>
+      <zipfileset prefix="${dist.name}/${docs}" dir="${docs}"/>
+      <zipfileset prefix="${dist.name}/examples" dir="examples"/>
+   </zip>
+</target>
+
+<target name="clean">
+   <delete includeemptydirs="true">
+      <fileset dir="." includes="*.zip"/>
+      <fileset dir="${build}" includes="**/*"/>
+      <fileset dir="examples" includes="**/*.class"/>
+      <fileset dir="${docs}/aminoacids" includes="**/*.html"/>
+      <fileset dir="${docs}/periodictable" includes="**/*.html"/>
+      <fileset dir="${docs}/api" includes="**/*"/>
+      <fileset dir="${docs}/tests" includes="**/*"/>
+   </delete>
+</target>
+
+<target name="metrics" description="compute code metrics">
+   <taskdef resource="checkstyletask.properties" classpathref="checkstyle.class.path"/>
+
+   <checkstyle config="checks.xml" failOnViolation="false">
+      <fileset dir="${src}" includes="**/*.java"/>
+      <property key="checkstyle.basedir" file="."/>
+      <formatter type="xml" toFile="${docs}/checks.xml"/>
+   </checkstyle>
+   <style in="${docs}/checks.xml" out="${docs}/checks.html" style="${checkstyle.home}/contrib/checkstyle-noframes-sorted.xsl"/>
+   <jdepend format="xml" outputfile="${docs}/metrics.xml">
+      <exclude name="java.*"/>
+      <exclude name="javax.*"/>
+      <classespath>
+         <pathelement location="${build}"/>
+      </classespath>
+   </jdepend>
+   <style in="${docs}/metrics.xml" out="${docs}/metrics.html" style="${ant.home}/etc/jdepend.xsl"/>
+</target>
+
+<target name="test" description="run unit tests">
+   <mkdir dir="${docs}/tests"/>
+   <junit printsummary="yes">
+      <classpath>
+         <path refid="project.class.path"/>
+         <pathelement location="${build}"/>
+         <pathelement location="${src}"/>
+      </classpath>
+      <formatter type="xml"/>
+      <batchtest todir="${docs}/tests">
+         <fileset dir="${src}" includes="JSci/tests/*Test.java"/>
+      </batchtest>
+   </junit>
+   <junitreport todir="${docs}/tests">
+      <fileset dir="${docs}/tests" includes="TEST-*.xml"/>
+      <report todir="${docs}/tests"/>
+   </junitreport>
+</target>
+</project>

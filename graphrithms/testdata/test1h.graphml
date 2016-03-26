@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns/graphml">
+  <graph edgedefault="directed" id="G" parse.edges="8" parse.nodes="5" parse.order="free">
+    <node id="n0">
+    </node>
+    <node id="n1">
+    </node>
+    <node id="n2">
+    </node>
+    <node id="n3">
+    </node>
+    <node id="n4">
+    </node>
+    <edge id="e0" source="n0" target="n1">
+    </edge>
+    <edge id="e1" source="n0" target="n2">
+    </edge>
+    <edge id="e2" source="n0" target="n3">
+    </edge>
+    <edge id="e3" source="n1" target="n2">
+    </edge>
+    <edge id="e4" source="n1" target="n3">
+    </edge>
+    <edge id="e5" source="n2" target="n3">
+    </edge>
+    <edge id="e6" source="n2" target="n4">
+    </edge>
+    <edge id="e7" source="n3" target="n4">
+    </edge>
+  </graph>
+</graphml>

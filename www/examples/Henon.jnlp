@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp href="http://jsci.org.uk/examples/Henon.jnlp"
+ codebase="http://jsci.org.uk/examples/">
+   <information>
+      <title>Henon map</title>
+      <vendor>Mark Hale</vendor>
+      <description>Orbit plot of the Henon map.</description>
+      <homepage href="http://jsci.org.uk/examples/"/>
+   </information>
+   <resources>
+      <j2se version="1.3+"/>
+      <jar href="chaos.jar"/>
+      <extension name="JSci" href="http://jsci.org.uk/jnlp/jsci.jnlp">
+         <ext-download ext-part="core"/>
+         <ext-download ext-part="xtra"/>
+      </extension>
+   </resources>
+   <applet-desc documentBase="http://jsci.org.uk/examples/Henon.html"
+ name="Henon map" width="400" height="400" main-class="HenonPlot"/>
+</jnlp>
